@@ -7,7 +7,6 @@ namespace Quazal {
         DateTime();
         DateTime(const DateTime &);
         DateTime &operator=(const DateTime &);
-        ~DateTime() {}
         operator unsigned long long() const;
         bool operator>(const DateTime &) const;
 

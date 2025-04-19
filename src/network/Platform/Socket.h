@@ -16,7 +16,7 @@ namespace Quazal {
         unsigned int unk8C;
         s32 unk90;
         u8 unk94;
-        BerkeleySocket *unk98;
+        BerkeleySocketDriver::BerkeleySocket *unk98;
 
         Socket(unsigned int);
         ~Socket();
@@ -28,6 +28,6 @@ namespace Quazal {
         Send(u8 *arg0, unsigned int arg1, InetAddress *arg2, IOCompletionContext *arg3);
         s32
         Recv(u8 *arg0, unsigned int arg1, InetAddress *arg2, IOCompletionContext *arg3);
-        BerkeleySocket *GetIOResult(IOCompletionContext *);
+        BerkeleySocketDriver::BerkeleySocket *GetIOResult(IOCompletionContext *);
     };
 }

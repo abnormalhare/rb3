@@ -19,7 +19,7 @@ namespace Quazal {
         this->unk88 = 1;
         this->unk8C = arg0;
         if (s_pSocketDriver) {
-            this->unk98 = s_pSocketDriver->unkC();
+            this->unk98 = s_pSocketDriver->Create();
         } else {
             this->unk98 = 0;
         }
@@ -27,11 +27,11 @@ namespace Quazal {
 
     Socket::~Socket() {
         if (this->unk0 != 3 && this->unk98 != nullptr) {
-            this->unk98->unkC();
+            this->unk98->~BerkeleySocket();
             this->unk0 = 3;
         }
         if (this->s_pSocketDriver != nullptr) {
-            this->s_pSocketDriver->unk10((u32)this->unk98);
+            this->s_pSocketDriver->Delete(this->unk98);
         }
     }
 
@@ -41,7 +41,7 @@ namespace Quazal {
         this->unk88 = arg0;
         var_r3 = 0;
         if (this->unk98 != nullptr) {
-            var_r3 = this->unk98->unk8((u8)arg0 == 0);
+            var_r3 = this->unk98->Open((SocketDriver::_TrafficType)((u8)arg0 == 0));
         }
         if (var_r3 != 0) {
             this->unk0 = 0;
@@ -60,7 +60,7 @@ namespace Quazal {
             var_r30 = arg0->GetPortNumber();
             if (var_r30 == 0) {
                 for (var_r29 = 0x2390; var_r31 == 0 && var_r29 < 0x23F0;) {
-                    if (this->unk98->unk10(var_r29) != 0) {
+                    if (this->unk98->Bind(var_r29) != 0) {
                         var_r30 = var_r29;
                         var_r31 = 1;
 
@@ -69,7 +69,7 @@ namespace Quazal {
                     }
                 }
             } else {
-                var_r31 = this->unk98->unk10(var_r30);
+                var_r31 = this->unk98->Bind(var_r30);
             }
             if (var_r31 != 0) {
                 arg0->SetPortNumber(var_r30);
@@ -88,7 +88,7 @@ namespace Quazal {
     void Socket::Close() {
         if (this->unk0 != 3) {
             if (this->unk98 != nullptr) {
-                this->unk98->unkC();
+                this->unk98->~BerkeleySocket();
                 this->unk0 = 3;
             }
         }
@@ -126,7 +126,7 @@ namespace Quazal {
                 var_r4 = 1;
                 break;
             case 1:
-                arg3->unkC = (BerkeleySocketDriver *)-1;
+                arg3->unkC = (BerkeleySocketDriver::BerkeleySocket *)-1;
                 arg3->unk14 = 2;
                 arg3->unk15 = 0;
                 var_r4 = 0;
@@ -180,7 +180,7 @@ namespace Quazal {
                 var_r4 = 1;
                 break;
             case 1:
-                arg3->unkC = (BerkeleySocketDriver *)-1;
+                arg3->unkC = (BerkeleySocketDriver::BerkeleySocket *)-1;
                 arg3->unk14 = 2;
                 arg3->unk15 = 0;
                 var_r4 = 0;
@@ -200,7 +200,7 @@ namespace Quazal {
         return 0;
     }
 
-    BerkeleySocket *Socket::GetIOResult(IOCompletionContext *arg0) {
+    BerkeleySocketDriver::BerkeleySocket *Socket::GetIOResult(IOCompletionContext *arg0) {
         if (this->unk98 != nullptr) {
             return arg0->unkC;
         } else {

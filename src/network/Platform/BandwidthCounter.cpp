@@ -8,12 +8,6 @@ namespace Quazal {
     qChain<BandwidthCounter *> BandwidthCounter::s_lstBWCounters;
     CriticalSection BandwidthCounter::s_cs(0x40000000);
 
-    BandwidthCounter::BandwidthCounter(const String &str)
-        : unk0(0), unk4(0), mName(str), mMin(-1), mMax(0), mTotal(0), mOccurences(0) {
-        ScopedCS scs(s_cs);
-        s_lstBWCounters.push_back(this);
-    }
-
     void BandwidthCounter::operator+=(unsigned int ui) {
         mTotal += ui;
         mOccurences++;
@@ -23,6 +17,12 @@ namespace Quazal {
         if (ui > mMax) {
             mMax = ui;
         }
+    }
+
+    BandwidthCounter::BandwidthCounter(const String &str)
+        : unk0(0), unk4(0), mName(str), mMin(-1), mMax(0), mTotal(0), mOccurences(0) {
+        ScopedCS scs(s_cs);
+        s_lstBWCounters.push_back(this);
     }
 
     BandwidthCounterMap::BandwidthCounterMap(const String &str) : mName(str) {}

@@ -10,7 +10,7 @@ namespace Quazal {
         u8 *unk0;
         u32 unk4;
         s32 unk8;
-        BerkeleySocket *unkC;
+        BerkeleySocketDriver::BerkeleySocket *unkC;
         InetAddress *unk10;
         s8 unk14;
         s8 unk15;
