@@ -12,8 +12,8 @@ extern "C" s32 SOInetPtoN(s32, char *, s32 *);
 extern "C" void SOInetNtoP(s32, const s32 *, char *, s32);
 extern s16 htons(u16 arg0);
 extern s16 ntohs(u16 arg0);
-extern s32 htonl(u32 arg0);
-extern s32 ntohl(u32 arg0);
+extern s32 htonl(Quazal::InetAddress *arg0);
+extern Quazal::InetAddress *ntohl(u32 arg0);
 
 namespace Quazal {
     InetAddress::InetAddress() {
@@ -143,11 +143,11 @@ namespace Quazal {
         return 1;
     }
 
-    void InetAddress::SetAddress(unsigned int addr) { this->address = htonl(addr); }
+    void InetAddress::SetAddress(InetAddress *addr) { this->address = htonl(addr); }
 
     void InetAddress::SetNetworkAddress(unsigned int addr) { this->address = addr; }
 
-    s32 InetAddress::GetAddress() const { return ntohl(this->address); }
+    InetAddress *InetAddress::GetAddress() const { return ntohl(this->address); }
 
     s32 InetAddress::GetAddress(char *arg0, unsigned int arg1) const {
         char sp8[0x20];

@@ -1,9 +1,10 @@
 #include "Platform/Socket.h"
+#include "Platform/Inet.h"
 
 typedef struct unkStruct {
     s32 unk8;
     char unkC[0x4];
-    s32 unk10;
+    Quazal::SocketDriver::InetAddress *unk10;
     s16 unk14;
 } unkStruct;
 
@@ -27,7 +28,7 @@ namespace Quazal {
 
     Socket::~Socket() {
         if (this->unk0 != 3 && this->unk98 != nullptr) {
-            this->unk98->~BerkeleySocket();
+            this->unk98->Close();
             this->unk0 = 3;
         }
         if (this->s_pSocketDriver != nullptr) {
@@ -88,7 +89,7 @@ namespace Quazal {
     void Socket::Close() {
         if (this->unk0 != 3) {
             if (this->unk98 != nullptr) {
-                this->unk98->~BerkeleySocket();
+                this->unk98->Close();
                 this->unk0 = 3;
             }
         }
@@ -114,9 +115,9 @@ namespace Quazal {
             temp.unk14 = portNum;
             temp.unk8 = 0;
             if (this->unk88 != 0) {
-                var_r3 = this->unk98->unk18(arg0, arg1, &temp.unk10, &temp.unk8);
+                var_r3 = this->unk98->SendTo(arg0, arg1, temp.unk10, &temp.unk8);
             } else {
-                var_r3 = this->unk98->unk24(arg0, arg1, &temp.unk8);
+                var_r3 = this->unk98->Send(arg0, arg1, &temp.unk8);
             }
             arg3->unk8 = temp.unk8;
             switch (var_r3) {
@@ -141,7 +142,7 @@ namespace Quazal {
                 var_r4 = 0;
                 break;
             }
-            return -(!var_r4);
+            return !var_r4 ? -1 : 0;
         }
         return 0;
     }
@@ -166,9 +167,9 @@ namespace Quazal {
             sp8.unk14 = temp_r31;
             sp8.unk8 = 0;
             if (this->unk88 != 0) {
-                var_r31 = this->unk98->unk14(arg0, arg1, &sp8.unk10, &sp8.unk8);
+                var_r31 = this->unk98->RecvFrom(arg0, arg1, sp8.unk10, &sp8.unk8);
             } else {
-                var_r31 = this->unk98->unk20(arg0, arg1, &sp8.unk8);
+                var_r31 = this->unk98->Recv(arg0, arg1, &sp8.unk8);
             }
             arg3->unk8 = sp8.unk8;
             arg3->unk10->SetAddress(sp8.unk10);

@@ -2,10 +2,11 @@
 
 #include "Platform/CriticalSection.h"
 #include "Platform/RootObject.h"
+#include "Platform/InetAddress.h"
 #include "types.h"
 
 namespace Quazal {
-    class SocketDriver {
+    class SocketDriver : public InetAddress {
     public:
         enum _TrafficType {
         };
@@ -13,16 +14,20 @@ namespace Quazal {
 
     class BerkeleySocketDriver {
     public:
-        class BerkeleySocket : public CriticalSection {
+        class BerkeleySocket : RootObject {
         public:
+            ~BerkeleySocket();
             virtual s32 Open(SocketDriver::_TrafficType);
-            virtual ~BerkeleySocket();
+            virtual void Close();
             virtual s32 Bind(u16);
-            virtual s32 unk14(u8 *, u32, s32 *, s32 *); // recv
-            virtual s32 unk18(u8 *, u32, s32 *, s32 *); // send
-            virtual void unk1C();
-            virtual s32 unk20(u8 *, u32, s32 *); // recv
-            virtual s32 unk24(u8 *, u32, s32 *); // send
+            virtual s32 RecvFrom(u8 *, unsigned int, InetAddress *, s32 *); // recv
+            virtual s32 SendTo(u8 *, unsigned int, InetAddress *, s32 *); // send
+            virtual void Connect();
+            virtual s32 Recv(u8 *, unsigned int, s32 *); // recv
+            virtual s32 Send(u8 *, unsigned int, s32 *); // send
+
+            char unk4[0x4];
+            CriticalSection unk8;
         };
         virtual void SetMulticastAddress(unsigned int);
         virtual BerkeleySocket *Create();

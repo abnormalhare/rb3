@@ -19,9 +19,9 @@ namespace Quazal {
         void Init();
 
         s32 SetAddress(const char *);
-        void SetAddress(unsigned int);
+        void SetAddress(InetAddress *);
         void SetNetworkAddress(unsigned int);
-        s32 GetAddress() const;
+        InetAddress *GetAddress() const;
         s32 GetAddress(char *, unsigned int) const;
 
         void SetPortNumber(u16);
